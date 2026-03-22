@@ -1,0 +1,26 @@
+{
+  "name": "fidelis-bank",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "connect-session-sequelize": "^8.0.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "express-validator": "^7.3.1",
+    "multer": "^2.1.1",
+    "node-cron": "^4.2.1",
+    "pg": "^8.20.0",
+    "sequelize": "^6.37.8",
+    "uuid": "^13.0.0"
+  }
+}
