@@ -1,8 +1,14 @@
 //Initialize Express application
 const express = require('express');
 const app = express();
+
 const db = require('./config/db');
 const User = require('./models/User');
+const Account = require('./models/Account');
+const Transaction = require('./models/Transaction');
+const FutureTransfer = require('./models/FutureTransfer');
+
+require('./models/associations');
 
 
 app.get('/', (req, res) => {
@@ -12,7 +18,7 @@ app.get('/', (req, res) => {
 
 
 
-db.sync()
+db.sync({ alter: true })
     .then(() => console.log('Tables synced'))
     .catch(err => console.log(err));
 
