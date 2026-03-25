@@ -38,6 +38,59 @@ const register = async (req, res) => {
     }
 };
 
+//User Login
+const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const user = await User.findOne({
+            where: { email }
+        });
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).send('Invalid credentials');
+        }
+        req.session.userId = user.id;
+
+        res.send('Login succesful');
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error logging in');
+    }
+};
+
+//User logout
+const logout = (req, res) => {
+    req.session.destroy((error) => {
+        if (error) {
+            return res.status(500).send('Error logging out');
+        }
+        res.send('Logout successful');
+    });
+};
+
+//Get authenticated user profile
+const getProfile = async (req, res) => {
+    try {
+        const user = await  User.findByPk(req.session.userId);
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+        res.json(user);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error getting profile')
+    }
+};
+
+
 module.exports = {
-    register
+    register,
+    login,
+    logout,
+    getProfile
 };
