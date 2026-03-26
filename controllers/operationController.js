@@ -1,6 +1,7 @@
 const Account = require('../models/Account');
 const Transaction = require('../models/Transaction');
 const FutureTransfer = require('../models/FutureTransfer');
+const { Op } = require('sequelize');
 
 //Transfer money between accounts
 const transfer = async (req, res) => {
@@ -107,11 +108,37 @@ const scheduleTransfer = async (req, res) => {
         res.status(500).send('Error scheduling future transfer');
     }
 };
+//Transaction history
+const getMyTransactions = async (req, res) => {
+    try {
+        const account = await Account.findAll({
+            where: {
+                userId: req.session.userId
+            }
+        });
+        const accountIds = account.map(account => account.id);
+        const Transaction = await Transaction.findAll({
+            where: {
+                accountId: {
+                    [Op.in]: accountIds
+                }
+            },
+            order: [['date', 'DESC']]
+        });
+        res.json(transactions);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error getting transactions'); 
+    }
+};
+
+
 
 
 module.exports = {
     transfer,
     getMyAccounts,
     requestLoan,
-    scheduleTransfer
+    scheduleTransfer,
+    getMyTransactions
 };

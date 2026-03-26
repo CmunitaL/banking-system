@@ -8,5 +8,6 @@ router.post('/transfer', isAuthenticated, operationController.transfer);
 router.get('/my-accounts', isAuthenticated, operationController.getMyAccounts);
 router.post('loan', isAuthenticated, operationController.requestLoan);
 router.post('/schedule-transfer', isAuthenticated, operationController.scheduleTransfer);
+router.get('transactions', isAuthenticated, operationController.getMyTransactions);
 
 module.exports = router;
