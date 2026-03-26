@@ -10,6 +10,7 @@ const Transaction = require('./models/Transaction');
 const FutureTransfer = require('./models/FutureTransfer');
 
 require('./models/associations');
+require('./jobs/transferjobs')
 
 const userRoutes = require('./routes/userRoutes');
 

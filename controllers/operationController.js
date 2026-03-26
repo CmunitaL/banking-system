@@ -1,5 +1,6 @@
 const Account = require('../models/Account');
 const Transaction = require('../models/Transaction');
+const FutureTransfer = require('../models/FutureTransfer');
 
 //Transfer money between accounts
 const transfer = async (req, res) => {
@@ -82,9 +83,35 @@ const requestLoan = async (res, req) => {
     }
 };
 
+//Schedule a future transfer
+const scheduleTransfer = async (req, res) => {
+    try {
+        const { accountId, amount, executionDate } = req.body;
+        const account = await Account.findByPk(accountId);
+
+        if (!account) {
+            return res.status(404).send('Account not found');
+        }
+        if (account.userId !== req.session.userId) {
+            return res.status(403).send('This account does not belong to the user');
+        }
+        await FutureTransfer.create({
+            amount,
+            executionDate,
+            status: 'pending',
+            accountId: account.id
+        });
+        res.send('Future transfer scheduled succesfully');
+    }   catch (error) {
+        console.log(error);
+        res.status(500).send('Error scheduling future transfer');
+    }
+};
+
 
 module.exports = {
     transfer,
     getMyAccounts,
-    requestLoan
+    requestLoan,
+    scheduleTransfer
 };
